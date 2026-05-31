@@ -1,13 +1,14 @@
-// src/app/page.tsx
-
 import Link from "next/link";
+import { prisma } from "@/lib/prisma";
 import { RELEASE_STEPS } from "@/lib/steps";
+
+export const dynamic = "force-dynamic";
 
 type Release = {
   id: string;
   name: string;
-  createdAt: string;
-  date: string;
+  createdAt: Date;
+  date: Date;
   completedSteps: string[];
 };
 
@@ -19,32 +20,10 @@ function computeStatus(completedSteps: string[]) {
   return "ongoing";
 }
 
-async function getReleases(): Promise<Release[]> {
-  try {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BASE_URL ??
-      (process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : "http://localhost:3000");
-
-    const res = await fetch(`${baseUrl}/api/releases`, {
-      cache: "no-store",
-    });
-
-    if (!res.ok) {
-      console.error(`Failed to fetch releases: ${res.status}`);
-      return [];
-    }
-
-    return await res.json();
-  } catch (error) {
-    console.error("Error fetching releases:", error);
-    return [];
-  }
-}
-
 export default async function HomePage() {
-  const releases = await getReleases();
+  const releases = await prisma.release.findMany({
+    orderBy: { createdAt: "desc" },
+  });
 
   return (
     <main style={{ padding: "2rem" }}>
@@ -72,23 +51,16 @@ export default async function HomePage() {
                 borderRadius: "8px",
               }}
             >
-              <Link
-                href={`/releases/${release.id}`}
-                style={{
-                  textDecoration: "none",
-                  color: "inherit",
-                }}
-              >
+              <Link href={`/releases/${release.id}`}>
                 <strong>{release.name}</strong>
               </Link>
 
               <div>
-                Created:{" "}
-                {new Date(release.createdAt).toLocaleDateString()}
+                Created: {release.createdAt.toLocaleDateString()}
               </div>
 
               <div>
-                Due: {new Date(release.date).toLocaleDateString()}
+                Due: {release.date.toLocaleDateString()}
               </div>
 
               <div>
