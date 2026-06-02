@@ -4,13 +4,6 @@ import { RELEASE_STEPS } from "@/lib/steps";
 
 export const dynamic = "force-dynamic";
 
-type Release = {
-  id: string;
-  name: string;
-  createdAt: Date;
-  date: Date;
-  completedSteps: string[];
-};
 
 function computeStatus(completedSteps: string[]) {
   const completed = completedSteps.length;

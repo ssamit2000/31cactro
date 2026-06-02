@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import ReleaseDetailClient from "./ReleaseDetailClient";
 import { RELEASE_STEPS } from "@/lib/steps";
 
+export const dynamic = "force-dynamic";
+
 interface Release {
   id: string;
   name: string;
