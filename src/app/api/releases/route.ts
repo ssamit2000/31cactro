@@ -26,5 +26,5 @@ export async function POST(req: Request) {
     },
   });
 
-  return NextResponse.json(release);
+  return NextResponse.json(release, { status: 201 });
 }

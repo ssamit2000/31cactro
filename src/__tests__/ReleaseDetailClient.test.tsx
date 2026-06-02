@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ReleaseDetailClient from '@/app/releases/[id]/ReleaseDetailClient';
 
@@ -8,6 +9,7 @@ const mockRelease = {
   status: 'planned',
   additionalInfo: '',
   completedSteps: [],
+  createdAt: new Date().toISOString(),
 };
 
 test('renders release name and steps', () => {
